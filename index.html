@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СитиКом — Каталог электротоваров</title>
+<style>
+:root{--blue:#174b78;--dark:#17324d;--light:#f3f6f9;--accent:#e5a52b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--light);color:#243447}
+header{background:var(--blue);color:white;padding:22px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.logo{font-size:27px;font-weight:800;letter-spacing:1px}
+.logo small{display:block;font-size:12px;font-weight:400;letter-spacing:0}
+header p{margin:0;font-size:14px}
+.hero{background:white;padding:28px 5%;border-bottom:1px solid #e2e8ef}
+.hero h1{margin:0 0 8px;color:var(--dark);font-size:27px}
+.hero p{margin:0;color:#68798a}
+main{max-width:1250px;margin:25px auto;padding:0 18px}
+.search{width:100%;padding:15px 17px;border:1px solid #ccd6df;border-radius:9px;font-size:16px;margin-bottom:20px}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.tab{border:1px solid #cbd5df;background:white;color:var(--dark);padding:11px 17px;border-radius:8px;cursor:pointer;font-size:14px}
+.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.section-title{font-size:21px;color:var(--dark);margin:15px 0}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:15px}
+.product{background:white;border:1px solid #e0e6ec;border-radius:11px;padding:17px;display:flex;flex-direction:column;min-height:220px}
+.product .type{font-size:12px;color:#718295;margin-bottom:10px}
+.product h3{font-size:15px;line-height:1.4;margin:0 0 12px;color:#263b50}
+.article{font-size:12px;color:#647587;margin-top:auto;overflow-wrap:anywhere}
+.price{font-size:21px;font-weight:700;color:var(--blue);margin-top:13px}
+.price small{font-size:13px;font-weight:400}
+footer{text-align:center;padding:28px 15px;color:#738293;font-size:13px}
+.empty{background:white;padding:25px;border-radius:9px;color:#718295}
+@media(max-width:600px){header{padding:18px}.hero h1{font-size:22px}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.product{padding:12px;min-height:230px}.product h3{font-size:13px}.price{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">СИТИКОМ<small>КОМПЛЕКСНЫЕ РЕШЕНИЯ</small></div>
+  <p>Каталог электротоваров GENERICA</p>
+</header>
+<section class="hero">
+  <h1>Розетки и выключатели</h1>
+  <p>Подберите товары по названию или артикулу. Указаны цены для заказа.</p>
+</section>
+<main>
+<input class="search" id="search" placeholder="Поиск по названию или артикулу..." oninput="render()">
+<div class="tabs">
+<button class="tab active" onclick="setCategory('oktava',this)">OKTAVA · IP20</button>
+<button class="tab" onclick="setCategory('vega',this)">VEGA · скрытый монтаж</button>
+<button class="tab" onclick="setCategory('aquatic',this)">AQUATIC · IP54</button>
+<button class="tab" onclick="setCategory('all',this)">Все товары</button>
+</div>
+<h2 class="section-title" id="sectionTitle">OKTAVA — открытый монтаж IP20</h2>
+<div class="products" id="products"></div>
+</main>
+<footer>СИТИКОМ · Каталог электротоваров<br>Актуальность цен уточняйте при оформлении заказа.</footer>
+<script>
+const items=[
+['oktava','Розетка 1-местная без заземления, белая','ERO10-K01-10-DC',134.92],
+['oktava','Розетка 1-местная с заземлением, белая','ERO11-K01-16-DC',135.11],
+['oktava','Розетка 2-местная без заземления, белая','ERO20-K01-10-DC',174.59],
+['oktava','Розетка 2-местная с заземлением и шторками, белая','ERO24-K01-16-DC',205.93],
+['oktava','Розетка 3-местная без заземления, белая','ERO30-K01-10-DC',321.08],
+['oktava','Розетка 3-местная с заземлением, белая','ERO31-K01-16-DC',417.00],
+['oktava','Розетка 1-местная без заземления, сосна','ERO10-K03-10-DC',197.01],
+['oktava','Розетка 1-местная без заземления, дуб','ERO10-K04-10-DC',198.65],
+['oktava','Розетка 1-местная с заземлением, дуб','ERO11-K04-16-DC',222.11],
+['oktava','Розетка 2-местная без заземления, дуб','ERO20-K04-10-DC',321.89],
+['oktava','Розетка 2-местная с заземлением, дуб','ERO21-K04-16-DC',358.03],
+['oktava','Розетка 3-местная с заземлением, дуб','ERO31-K04-16-DC',629.80],
+['oktava','Выключатель 1-клавишный, белый','EVO10-K01-10-DC',103.97],
+['oktava','Выключатель 2-клавишный, белый','EVO20-K01-10-DC',116.53],
+['oktava','Выключатель 1-клавишный, дуб','EVO10-K04-10-DC',185.85],
+['oktava','Выключатель 2-клавишный, дуб','EVO20-K04-10-DC',195.84],
+['vega','Розетка 1-местная с заземлением, белая','ERV11-K01-16-DM',145.19],
+['vega','Розетка 2-местная с заземлением, белая','ERV21-K01-16-DM',220.87],
+['vega','Выключатель 1-клавишный, белый','EVV10-K01-10-DM',122.95],
+['vega','Выключатель 2-клавишный, белый','EVV20-K01-10-DM',149.45],
+['vega','Выключатель 3-клавишный, белый','EVV30-K01-10-DM',185.89],
+['aquatic','Розетка 1-местная с заземлением, с крышкой IP54','ERA12-K03-16-54',402.26],
+['aquatic','Розетка 2-местная с заземлением, с крышкой IP54','ERA22-K03-16-54',797.97]
+];
+let category='oktava';
+const titles={oktava:'OKTAVA — открытый монтаж IP20',vega:'VEGA — скрытый монтаж',aquatic:'AQUATIC — открытый монтаж IP54',all:'Все товары'};
+function setCategory(value,button){
+ category=value;
+ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+ button.classList.add('active');
+ render();
+}
+function render(){
+ const q=document.getElementById('search').value.toLowerCase().trim();
+ const filtered=items.filter(p=>(category==='all'||p[0]===category)&&(p[1]+' '+p[2]).toLowerCase().includes(q));
+ document.getElementById('sectionTitle').textContent=titles[category];
+ document.getElementById('products').innerHTML=filtered.length?filtered.map(p=>`
+ <article class="product">
+ <div class="type">${p[0].toUpperCase()}</div>
+ <h3>${p[1]}</h3>
+ <div class="article">Артикул: ${p[2]}</div>
+ <div class="price">${p[3].toFixed(2).replace('.',',')} ₽</div>
+ </article>`).join(''):'<div class="empty">По вашему запросу товары не найдены.</div>';
+}
+render();
+</script>
+</body>
+</html>
